@@ -1,6 +1,6 @@
 "use client";
 
-import { DoorOpen, CheckCircle2, Users, Settings2, Filter, Download, Printer, Edit2, Calendar } from "lucide-react";
+import { DoorOpen, CheckCircle2, Users, Settings2, Download, Printer, Edit2, Calendar } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
@@ -12,13 +12,23 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Room } from "@/types/room.types";
 
-export function RoomStats() {
+interface RoomProps {
+  salles: Room[];
+}
+
+export function RoomStats({ salles }: RoomProps) {
+  const totalCapacity = salles.reduce((acc, s) => acc + (s.Capacite || 0), 0);
+  const totalRooms = salles.length;
+  const availableRooms = salles.filter((_, i) => i % 3 !== 0).length; // Mock availability formula
+  const maintenanceRooms = salles.filter((_, i) => i % 15 === 0 && i !== 0).length;
+
   const stats = [
-    { label: "Total Rooms", value: "124", icon: DoorOpen, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "Available Now", value: "82", icon: CheckCircle2, color: "text-green-600", bg: "bg-green-50" },
-    { label: "Total Capacity", value: "4,250", icon: Users, color: "text-amber-600", bg: "bg-amber-50" },
-    { label: "Maintenance", value: "4", icon: Settings2, color: "text-gray-600", bg: "bg-gray-100" }
+    { label: "Total Rooms", value: totalRooms.toString(), icon: DoorOpen, color: "text-blue-600", bg: "bg-blue-50" },
+    { label: "Available Now", value: availableRooms.toString(), icon: CheckCircle2, color: "text-green-600", bg: "bg-green-50" },
+    { label: "Total Capacity", value: totalCapacity.toLocaleString(), icon: Users, color: "text-amber-600", bg: "bg-amber-50" },
+    { label: "Maintenance", value: maintenanceRooms.toString(), icon: Settings2, color: "text-gray-600", bg: "bg-gray-100" }
   ];
 
   return (
@@ -40,15 +50,16 @@ export function RoomStats() {
   );
 }
 
-const rooms = [
-  { name: "Amphi A1", building: "Building A", floor: "Ground Floor", capacity: "250 seats", type: "Lecture Hall", status: "Available" },
-  { name: "Lab B-302", building: "Building B", floor: "3rd Floor", capacity: "45 seats", type: "Computer Lab", status: "Occupied" },
-  { name: "Seminar C02", building: "Building C", floor: "1st Floor", capacity: "20 seats", type: "Seminar Room", status: "Available" },
-  { name: "Lab A-212", building: "Building A", floor: "2nd Floor", capacity: "30 seats", type: "Computer Lab", status: "Available" },
-  { name: "Conference D1", building: "Building D", floor: "Top Floor", capacity: "100 seats", type: "Lecture Hall", status: "Occupied" },
-];
+export function RoomInventoryTable({ salles }: RoomProps) {
+  // Format floor names helper
+  const getFloorName = (floor: number) => {
+    if (floor === 0) return "Ground Floor";
+    if (floor === 1) return "1st Floor";
+    if (floor === 2) return "2nd Floor";
+    if (floor === 3) return "3rd Floor";
+    return `${floor}th Floor`;
+  };
 
-export function RoomInventoryTable() {
   return (
     <Card className="border-none shadow-sm bg-white">
       <CardHeader className="flex flex-row items-center justify-between border-b border-gray-50 pb-6">
@@ -72,42 +83,51 @@ export function RoomInventoryTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rooms.map((room, i) => (
-              <TableRow key={i} className="hover:bg-gray-50 transition-colors">
-                <TableCell className="pl-8 font-bold text-[#001f3f] py-5">{room.name}</TableCell>
-                <TableCell className="text-sm text-gray-600">{room.building}</TableCell>
-                <TableCell className="text-sm text-gray-500">{room.floor}</TableCell>
-                <TableCell className="text-sm font-medium text-gray-700">{room.capacity}</TableCell>
-                <TableCell>
-                  <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-none font-medium text-[10px] px-2 py-0.5">
-                    {room.type}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                    room.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
-                  }`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${room.status === 'Available' ? 'bg-green-500' : 'bg-amber-500'}`} />
-                    {room.status}
-                  </div>
-                </TableCell>
-                <TableCell className="pr-8 text-right">
-                  <div className="flex justify-end gap-4">
-                    <button className="text-xs font-bold text-blue-900 hover:underline flex items-center gap-1"><Edit2 size={12} /> Edit Room</button>
-                    <button className="text-xs font-bold text-amber-600 hover:underline flex items-center gap-1"><Calendar size={12} /> View Schedule</button>
-                  </div>
+            {salles.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                  Aucune salle disponible.
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              salles.map((room, i) => {
+                const isAvailable = i % 3 !== 0;
+                return (
+                  <TableRow key={room.IdSalle || i} className="hover:bg-gray-50 transition-colors">
+                    <TableCell className="pl-8 font-bold text-[#001f3f] py-5">{room.NomSalle}</TableCell>
+                    <TableCell className="text-sm text-gray-600">Building {room.CodeBatiment}</TableCell>
+                    <TableCell className="text-sm text-gray-500">{getFloorName(room.Etage)}</TableCell>
+                    <TableCell className="text-sm font-medium text-gray-700">{room.Capacite} seats</TableCell>
+                    <TableCell>
+                      <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-none font-medium text-[10px] px-2 py-0.5">
+                        {room.TypeSalle || "Lecture Hall"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                        isAvailable ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                      }`}>
+                        <div className={`w-1.5 h-1.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-amber-500'}`} />
+                        {isAvailable ? "Available" : "Occupied"}
+                      </div>
+                    </TableCell>
+                    <TableCell className="pr-8 text-right">
+                      <div className="flex justify-end gap-4">
+                        <button className="text-xs font-bold text-blue-900 hover:underline flex items-center gap-1"><Edit2 size={12} /> Edit Room</button>
+                        <button className="text-xs font-bold text-amber-600 hover:underline flex items-center gap-1"><Calendar size={12} /> View Schedule</button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            )}
           </TableBody>
         </Table>
         <div className="p-6 border-t border-gray-50 flex items-center justify-between">
-          <p className="text-[11px] text-gray-400">Showing 1-5 of 124 rooms</p>
+          <p className="text-[11px] text-gray-400">Showing {salles.length} rooms</p>
           <div className="flex gap-1">
             <Button variant="ghost" size="sm" className="w-9 h-9 p-0 rounded-lg">&lt;</Button>
             <Button className="w-9 h-9 p-0 rounded-lg bg-[#001f3f] hover:bg-[#001429]">1</Button>
-            <Button variant="ghost" size="sm" className="w-9 h-9 p-0 rounded-lg">2</Button>
-            <Button variant="ghost" size="sm" className="w-9 h-9 p-0 rounded-lg">3</Button>
             <Button variant="ghost" size="sm" className="w-9 h-9 p-0 rounded-lg">&gt;</Button>
           </div>
         </div>

@@ -19,11 +19,11 @@ import { Button } from "@/components/ui/button";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Tableau de bord", href: "/" },
-  { icon: Calendar, label: "Emplois du temps", href: "/schedules" },
-  { icon: DoorOpen, label: "Salles de classe", href: "/classrooms" },
+  { icon: Calendar, label: "Emplois du temps", href: "/emplois-du-temps" },
+  { icon: DoorOpen, label: "Salles de classe", href: "/salles" },
   { icon: Users, label: "Enseignants", href: "/faculty" },
   { icon: Network, label: "Structures", href: "/structures" },
-  { icon: ClipboardList, label: "Requêtes", href: "/requests" },
+  { icon: ClipboardList, label: "Requêtes", href: "/requetes" },
   { icon: CheckSquare, label: "Validation", href: "/validation" },
 ];
 

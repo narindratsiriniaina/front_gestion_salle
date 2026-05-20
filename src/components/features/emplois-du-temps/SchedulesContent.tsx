@@ -9,9 +9,9 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { TimetableGrid, SidebarSchedules } from "@/components/features/schedules/TimetableComponents";
+import { TimetableGrid, SidebarSchedules } from "@/components/features/emplois-du-temps/TimetableComponents";
 
-export default function SchedulesPage() {
+export function SchedulesContent() {
   return (
     <div className="space-y-8 animate-in fade-in zoom-in-95 duration-500 relative">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

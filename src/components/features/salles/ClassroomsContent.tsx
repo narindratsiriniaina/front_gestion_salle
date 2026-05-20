@@ -1,6 +1,7 @@
 "use client";
 
-import { Plus, Filter } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Plus, Filter, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
   Select, 
@@ -9,10 +10,32 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { RoomStats, RoomInventoryTable, UsageEfficiency } from "@/components/features/classrooms/RoomComponents";
+import { RoomStats, RoomInventoryTable, UsageEfficiency } from "@/components/features/salles/RoomComponents";
 import { Card } from "@/components/ui/card";
+import { roomService } from "@/services/room.service";
+import { Room } from "@/types/room.types";
 
-export default function ClassroomsPage() {
+export function ClassroomsContent() {
+  const [salles, setSalles] = useState<Room[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchSalles() {
+      try {
+        setLoading(true);
+        const data = await roomService.getRooms();
+        setSalles(data);
+      } catch (err: unknown) {
+        console.error("Failed to fetch salles", err);
+        setError("Erreur lors de la récupération des salles.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSalles();
+  }, []);
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -49,9 +72,22 @@ export default function ClassroomsPage() {
         </div>
       </div>
 
-      <RoomStats />
+      {loading ? (
+        <div className="flex justify-center items-center py-24">
+          <Loader2 className="w-8 h-8 text-[#001f3f] animate-spin" />
+          <span className="ml-2 text-gray-500 font-bold">Chargement des données...</span>
+        </div>
+      ) : error ? (
+        <div className="bg-red-50 text-red-600 p-6 rounded-xl border border-red-100 font-semibold">
+          {error}
+        </div>
+      ) : (
+        <>
+          <RoomStats salles={salles} />
 
-      <RoomInventoryTable />
+          <RoomInventoryTable salles={salles} />
+        </>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         <div className="lg:col-span-8">
