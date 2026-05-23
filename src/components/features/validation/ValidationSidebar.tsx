@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export function ValidationStats() {
   return (
-    <Card className="bg-[#001f3f] text-white border-none shadow-xl">
+    <Card className="bg-[#17203A] text-white border-none shadow-xl">
       <CardContent className="p-8 space-y-6">
         <h3 className="text-xl font-bold">Statistiques du jour</h3>
         
@@ -51,7 +51,7 @@ export function RecentHistory() {
   return (
     <Card className="border-none shadow-sm bg-white">
       <CardHeader>
-        <CardTitle className="text-lg font-bold text-[#001f3f]">Historique Récent</CardTitle>
+        <CardTitle className="text-lg font-bold text-[#17203A]">Historique Récent</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-6 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-gray-100">

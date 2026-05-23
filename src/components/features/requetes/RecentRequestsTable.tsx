@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ListFilter, Download, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ interface RecentRequestsTableProps {
 
 export function RecentRequestsTable({ demandes }: RecentRequestsTableProps) {
   // Helpers to map backend French status to styles
-  const getStatusConfig = (statut: string) => {
+  const getStatutConfig = (statut: string) => {
     const s = statut?.toLowerCase();
     if (s === "validée" || s === "validee" || s === "approved") {
       return { label: "Approved", color: "bg-green-500" };
@@ -33,10 +33,10 @@ export function RecentRequestsTable({ demandes }: RecentRequestsTableProps) {
   return (
     <Card className="border-none shadow-sm bg-white h-full flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between border-b border-gray-50 pb-6">
-        <CardTitle className="text-xl font-bold text-[#001f3f]">Recent Requests</CardTitle>
+        <CardTitle className="text-xl font-bold text-[#17203A]">Requêtes Récentes</CardTitle>
         <div className="flex gap-2">
-          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-[#001f3f]"><ListFilter size={18} /></Button>
-          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-[#001f3f]"><Download size={18} /></Button>
+          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-[#17203A]"><ListFilter size={18} /></Button>
+          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-[#17203A]"><Download size={18} /></Button>
         </div>
       </CardHeader>
       <CardContent className="flex-1 p-0">
@@ -47,7 +47,7 @@ export function RecentRequestsTable({ demandes }: RecentRequestsTableProps) {
               <TableHead className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Type</TableHead>
               <TableHead className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Subject</TableHead>
               <TableHead className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Justification</TableHead>
-              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-gray-400 pr-8">Status</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-gray-400 pr-8">Statut</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -59,7 +59,7 @@ export function RecentRequestsTable({ demandes }: RecentRequestsTableProps) {
               </TableRow>
             ) : (
               demandes.map((req, i) => {
-                const statusConfig = getStatusConfig(req.Statut);
+                const statusConfig = getStatutConfig(req.Statut);
                 const subject = req.Cours?.Matiere?.NomMatiere || `Salle ${req.IdSalle || ""}`;
                 return (
                   <TableRow key={req.IdDemande || i} className="group hover:bg-gray-50 border-b border-gray-50">
@@ -84,10 +84,10 @@ export function RecentRequestsTable({ demandes }: RecentRequestsTableProps) {
         </Table>
         
         <div className="p-6 border-t border-gray-50 flex items-center justify-between">
-          <p className="text-[11px] text-gray-400">Showing {demandes.length} requests</p>
+          <p className="text-[11px] text-gray-400">Affichage de {demandes.length} requests</p>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="px-4 h-9 text-[11px] font-bold">Previous</Button>
-            <Button variant="outline" size="sm" className="px-4 h-9 text-[11px] font-bold">Next</Button>
+            <Button variant="outline" size="sm" className="px-4 h-9 text-[11px] font-bold">Précédent</Button>
+            <Button variant="outline" size="sm" className="px-4 h-9 text-[11px] font-bold">Suivant</Button>
           </div>
         </div>
       </CardContent>

@@ -36,11 +36,11 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col h-screen w-64 bg-[#001f3f] text-white border-r border-white/10">
+    <div className="flex flex-col h-screen w-64 bg-[#17203A] text-white border-r border-white/10">
       <div className="p-6 mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-            <Network className="text-[#001f3f] w-6 h-6" />
+            <Network className="text-[#17203A] w-6 h-6" />
           </div>
           <div>
             <h1 className="font-bold text-lg leading-tight">EMIT</h1>
@@ -57,7 +57,7 @@ export function Sidebar() {
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group",
               pathname === item.href 
-                ? "bg-[#b8860b] text-white font-medium" 
+                ? "bg-[#5C8ABF] text-white font-medium" 
                 : "text-white/70 hover:bg-white/5 hover:text-white"
             )}
           >
@@ -72,7 +72,7 @@ export function Sidebar() {
 
       <div className="px-4 py-6 space-y-4">
         <Button 
-          className="w-full justify-start gap-3 bg-[#b8860b] hover:bg-[#a67a0a] text-white border-none"
+          className="w-full justify-start gap-3 bg-[#5C8ABF] hover:bg-[#a67a0a] text-white border-none"
           size="lg"
         >
           <Plus className="w-5 h-5" />

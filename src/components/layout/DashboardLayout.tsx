@@ -7,15 +7,22 @@ import { usePathname } from "next/navigation";
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   
+  // Routes where the Dashboard layout (Sidebar/Topbar) should NOT be displayed
+  const isAuthPage = pathname === "/" || pathname === "/connexion" || pathname === "/inscription";
+
+  if (isAuthPage) {
+    return <div className="min-h-screen bg-[#f8fafc]">{children}</div>;
+  }
+
   const getTitle = (path: string) => {
-    if (path === "/") return "Academic Portal";
     if (path === "/emplois-du-temps") return "Emploi du Temps";
     if (path === "/salles") return "Gestion des Salles";
     if (path === "/faculty") return "Annuaire des Enseignants";
     if (path === "/structures") return "Configuration Académique";
     if (path === "/requetes") return "Portail des Requêtes";
     if (path === "/validation") return "Portail de Validation";
-    return "Academic Portal";
+    if (path === "/dashboard") return "Tableau de bord";
+    return "Portail Académique";
   };
 
   return (

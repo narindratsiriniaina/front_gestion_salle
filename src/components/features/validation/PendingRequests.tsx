@@ -38,8 +38,8 @@ export function PendingRequests() {
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <Clock className="w-5 h-5 text-[#001f3f]" />
-          <h3 className="text-xl font-bold text-[#001f3f]">Demandes en attente</h3>
+          <Clock className="w-5 h-5 text-[#17203A]" />
+          <h3 className="text-xl font-bold text-[#17203A]">Demandes en attente</h3>
         </div>
         <Badge className="bg-amber-400 text-amber-950 hover:bg-amber-400 border-none px-4 py-1">
           4 Actions requises
@@ -107,7 +107,7 @@ export function PendingRequests() {
                 <Button variant="outline" className="flex-1 md:flex-none border-gray-300 text-gray-700 px-8">
                   Rejeter
                 </Button>
-                <Button className="flex-1 md:flex-none bg-[#001f3f] hover:bg-[#001429] px-8">
+                <Button className="flex-1 md:flex-none bg-[#17203A] hover:bg-[#12192B] px-8">
                   Approuver
                 </Button>
               </div>
