@@ -26,7 +26,7 @@ export const roomService = {
     return response.data;
   },
 
-  getAvailableRooms: async (): Promise<Room[]> => {
+  getDisponibleRooms: async (): Promise<Room[]> => {
     const response = await api.get<Room[]>("/Salle/Disponibles");
     return response.data;
   },

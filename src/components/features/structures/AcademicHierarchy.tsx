@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Plus, Edit2, ChevronDown, Network } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,10 +37,10 @@ export function AcademicHierarchy() {
           <div className="p-2 bg-blue-50 rounded-lg">
             <Network className="w-5 h-5 text-blue-900" />
           </div>
-          <CardTitle className="text-xl font-bold text-[#001f3f]">Hiérarchie Institutionnelle</CardTitle>
+          <CardTitle className="text-xl font-bold text-[#17203A]">Hiérarchie Institutionnelle</CardTitle>
         </div>
-        <Button className="bg-[#001f3f] hover:bg-[#001429] gap-2">
-          <Plus className="w-4 h-4" /> Add Level
+        <Button className="bg-[#17203A] hover:bg-[#12192B] gap-2">
+          <Plus className="w-4 h-4" /> Ajouter un Niveau
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">

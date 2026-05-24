@@ -18,11 +18,11 @@ export function DashboardContent() {
     <div className="space-y-8 animate-in fade-in duration-700">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-black text-[#001f3f] tracking-tight">Bienvenue, Admin</h1>
+          <h1 className="text-4xl font-black text-[#17203A] tracking-tight">Bienvenue, Admin</h1>
           <p className="text-gray-500 mt-1">Voici un aperçu de l'état actuel de l'université.</p>
         </div>
         <div className="flex gap-3">
-          <Button className="bg-[#b8860b] hover:bg-[#a67a0a] gap-2 shadow-lg shadow-amber-900/10 h-12 px-6">
+          <Button className="bg-[#5C8ABF] hover:bg-[#a67a0a] gap-2 shadow-lg shadow-amber-900/10 h-12 px-6">
             <TrendingUp className="w-4 h-4" /> Voir les rapports
           </Button>
         </div>
@@ -46,7 +46,7 @@ export function DashboardContent() {
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{stat.label}</p>
-                  <h4 className="text-2xl font-black text-[#001f3f]">{stat.value}</h4>
+                  <h4 className="text-2xl font-black text-[#17203A]">{stat.value}</h4>
                 </div>
               </div>
             </CardContent>
@@ -57,7 +57,7 @@ export function DashboardContent() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <Card className="lg:col-span-2 border-none shadow-sm bg-white overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between border-b border-gray-50 pb-6 px-8">
-            <CardTitle className="text-xl font-bold text-[#001f3f]">Activités Récentes</CardTitle>
+            <CardTitle className="text-xl font-bold text-[#17203A]">Activités Récentes</CardTitle>
             <Button variant="ghost" className="text-blue-600 font-bold hover:bg-blue-50 gap-1">
               Tout voir <ArrowRight size={16} />
             </Button>
@@ -79,7 +79,7 @@ export function DashboardContent() {
                     <Bell size={18} className="group-hover:animate-ring" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-gray-900 group-hover:text-[#001f3f] transition-colors">{activity.title}</p>
+                    <p className="font-bold text-gray-900 group-hover:text-[#17203A] transition-colors">{activity.title}</p>
                     <p className="text-xs text-gray-500">{activity.user} • {activity.time}</p>
                   </div>
                   <Badge variant="ghost" className="opacity-0 group-hover:opacity-100 transition-opacity">
@@ -92,7 +92,7 @@ export function DashboardContent() {
         </Card>
 
         <div className="space-y-8">
-          <Card className="bg-[#001f3f] text-white border-none shadow-xl relative overflow-hidden">
+          <Card className="bg-[#17203A] text-white border-none shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 p-6 opacity-10">
               <TrendingUp size={100} />
             </div>
@@ -107,7 +107,7 @@ export function DashboardContent() {
                   <div className="h-full bg-amber-500 rounded-full" style={{ width: '78%' }} />
                 </div>
               </div>
-              <Button className="w-full bg-white text-[#001f3f] hover:bg-blue-50 font-bold h-12 rounded-xl">
+              <Button className="w-full bg-white text-[#17203A] hover:bg-blue-50 font-bold h-12 rounded-xl">
                 Détails de l'analyse
               </Button>
             </CardContent>
@@ -122,7 +122,7 @@ export function DashboardContent() {
                 <h4 className="font-bold text-gray-900">Support Technique</h4>
                 <p className="text-xs text-gray-500 mt-1">Besoin d'aide avec la plateforme ?</p>
               </div>
-              <Button variant="outline" className="w-full border-dashed border-2 hover:border-[#001f3f] hover:text-[#001f3f]">
+              <Button variant="outline" className="w-full border-dashed border-2 hover:border-[#17203A] hover:text-[#17203A]">
                 Contacter le support
               </Button>
             </div>

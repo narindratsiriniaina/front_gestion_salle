@@ -34,14 +34,14 @@ export function RequestsContent() {
     <div className="space-y-8 animate-in fade-in slide-in-from-left-4 duration-500">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-black text-[#001f3f] tracking-tight">Request Portal</h1>
-          <p className="text-gray-500 mt-1">Manage and track your schedule modifications or facility reservations.</p>
+          <h1 className="text-3xl font-black text-[#17203A] tracking-tight">Portail des Requêtes</h1>
+          <p className="text-gray-500 mt-1">Gérez et suivez vos modifications d'emploi du temps ou réservations de salles.</p>
         </div>
       </div>
 
       {loading ? (
         <div className="flex justify-center items-center py-24">
-          <Loader2 className="w-8 h-8 text-[#001f3f] animate-spin" />
+          <Loader2 className="w-8 h-8 text-[#17203A] animate-spin" />
           <span className="ml-2 text-gray-500 font-bold">Chargement des requêtes...</span>
         </div>
       ) : error ? (

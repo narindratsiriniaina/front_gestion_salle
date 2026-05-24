@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, Clock, Send, Info, Loader2 } from "lucide-react";
+import { Calendar, Clock, Send, Info, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { 
@@ -19,6 +19,7 @@ import { Room } from "@/types/room.types";
 import { roomService } from "@/services/room.service";
 import { requestService } from "@/services/request.service";
 import { toast } from "sonner";
+import { timetableService } from "@/services/timetable.service";
 
 interface SubmitRequestFormProps {
   onSubmitted: () => void;
@@ -27,28 +28,37 @@ interface SubmitRequestFormProps {
 export function SubmitRequestForm({ onSubmitted }: SubmitRequestFormProps) {
   const [salles, setSalles] = useState<Room[]>([]);
   const [loadingRooms, setLoadingRooms] = useState(false);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(false);
   
   const [typeDemande, setTypeDemande] = useState("Modification");
   const [idSalle, setIdSalle] = useState<string>("");
+  const [idCours, setIdCours] = useState<string>("");
   const [justification, setJustification] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    async function loadSalles() {
+    async function loadData() {
       try {
         setLoadingRooms(true);
-        const data = await roomService.getRooms();
-        setSalles(data);
-        if (data.length > 0) {
-          setIdSalle(data[0].IdSalle.toString());
-        }
+        setLoadingCourses(true);
+        
+        const roomsData = await roomService.getRooms();
+        setSalles(roomsData);
+        if (roomsData.length > 0) setIdSalle(roomsData[0].IdSalle.toString());
+
+        const coursesData = await timetableService.getWeeklyTimetable({});
+        setCourses(coursesData);
+        if (coursesData.length > 0) setIdCours(coursesData[0].IdCours.toString());
+
       } catch (err) {
-        console.error("Failed to load salles in form", err);
+        console.error("Erreur lors du chargement", err);
       } finally {
         setLoadingRooms(false);
+        setLoadingCourses(false);
       }
     }
-    loadSalles();
+    loadData();
   }, []);
 
   const handleSubmit = async () => {
@@ -59,9 +69,13 @@ export function SubmitRequestForm({ onSubmitted }: SubmitRequestFormProps) {
 
     try {
       setSubmitting(true);
+      const userStr = localStorage.getItem("user");
+      const user = userStr ? JSON.parse(userStr) : { id: 1 };
+
       const newDemande: Omit<TimetableRequest, "IdDemande"> = {
-        IdDemandeur: 1, // Mock current user ID
+        IdDemandeur: parseInt(user.id) || 1,
         IdSalle: idSalle ? parseInt(idSalle) : undefined,
+        IdCours: idCours ? parseInt(idCours) : undefined,
         TypeDemande: typeDemande,
         Statut: "en attente",
         Justification: justification,
@@ -71,9 +85,10 @@ export function SubmitRequestForm({ onSubmitted }: SubmitRequestFormProps) {
       toast.success("Votre demande a été soumise avec succès.");
       setJustification("");
       onSubmitted();
-    } catch (err) {
-      console.error("Failed to submit request", err);
-      toast.error("Erreur lors de la soumission de la demande.");
+    } catch (err: any) {
+      console.error("Échec de la soumission", err);
+      const msg = err.response?.data?.ExceptionMessage || err.response?.data?.Message || err.message;
+      toast.error("Erreur de soumission", { description: msg });
     } finally {
       setSubmitting(false);
     }
@@ -84,66 +99,73 @@ export function SubmitRequestForm({ onSubmitted }: SubmitRequestFormProps) {
       <CardHeader className="border-b border-gray-50 pb-6">
         <div className="flex items-center gap-2">
           <Calendar className="w-5 h-5 text-amber-600" />
-          <CardTitle className="text-xl font-bold text-[#001f3f]">Submit New Request</CardTitle>
+          <CardTitle className="text-xl font-bold text-[#17203A]">Nouvelle Demande</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="pt-8 space-y-8">
         <div className="space-y-3">
-          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">Request Type</p>
+          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">Type de demande</p>
           <Tabs defaultValue="Modification" onValueChange={setTypeDemande} className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-14 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
               <TabsTrigger 
                 value="Modification" 
-                className="rounded-lg font-bold data-[state=active]:bg-white data-[state=active]:text-[#001f3f] data-[state=active]:shadow-sm"
+                className="rounded-lg font-bold data-[state=active]:bg-white data-[state=active]:text-[#17203A] data-[state=active]:shadow-sm"
               >
-                Modification
+                Modification de Cours
               </TabsTrigger>
               <TabsTrigger 
                 value="Reservation"
-                className="rounded-lg font-bold data-[state=active]:bg-white data-[state=active]:text-[#001f3f] data-[state=active]:shadow-sm"
+                className="rounded-lg font-bold data-[state=active]:bg-white data-[state=active]:text-[#17203A] data-[state=active]:shadow-sm"
               >
-                Reservation
+                Nouvelle Réservation
               </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
 
-        <div className="space-y-3">
-          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">Target Room (Salle)</p>
-          {loadingRooms ? (
-            <div className="h-14 flex items-center justify-center bg-gray-50 border border-gray-100 rounded-xl">
-              <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
-            </div>
-          ) : (
-            <Select value={idSalle} onValueChange={setIdSalle}>
-              <SelectTrigger className="h-14 bg-gray-50 border-gray-100 rounded-xl focus:ring-1 focus:ring-[#001f3f]/10">
-                <SelectValue placeholder="Select a classroom..." />
-              </SelectTrigger>
-              <SelectContent>
-                {salles.map((salle) => (
-                  <SelectItem key={salle.IdSalle} value={salle.IdSalle.toString()}>
-                    {salle.NomSalle} (Capacité: {salle.Capacite})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">Preferred Date</p>
-            <div className="relative">
-              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input type="date" className="h-14 pl-12 bg-gray-50 border-gray-100 rounded-xl" />
-            </div>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">Cours Concerné</p>
+            {loadingCourses ? (
+              <div className="h-14 flex items-center justify-center bg-gray-50 border border-gray-100 rounded-xl">
+                <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+              </div>
+            ) : (
+              <Select value={idCours} onValueChange={setIdCours}>
+                <SelectTrigger className="h-14 bg-gray-50 border-gray-100 rounded-xl focus:ring-1 focus:ring-[#17203A]/10">
+                  <SelectValue placeholder="Sélectionnez un cours..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {courses.map((c) => (
+                    <SelectItem key={c.IdCours} value={c.IdCours.toString()}>
+                      {c.Matiere?.NomMatiere || `Cours #${c.IdCours}`} ({c.TypeCours})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
+
           <div className="space-y-3">
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">Preferred Time</p>
-            <div className="relative">
-              <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input type="time" className="h-14 pl-12 bg-gray-50 border-gray-100 rounded-xl" />
-            </div>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">Salle Ciblée</p>
+            {loadingRooms ? (
+              <div className="h-14 flex items-center justify-center bg-gray-50 border border-gray-100 rounded-xl">
+                <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+              </div>
+            ) : (
+              <Select value={idSalle} onValueChange={setIdSalle}>
+                <SelectTrigger className="h-14 bg-gray-50 border-gray-100 rounded-xl focus:ring-1 focus:ring-[#17203A]/10">
+                  <SelectValue placeholder="Sélectionnez une salle..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {salles.map((salle) => (
+                    <SelectItem key={salle.IdSalle} value={salle.IdSalle.toString()}>
+                      {salle.NomSalle} (Capacité: {salle.Capacite})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
         </div>
 
@@ -152,7 +174,7 @@ export function SubmitRequestForm({ onSubmitted }: SubmitRequestFormProps) {
           <Textarea 
             value={justification}
             onChange={(e) => setJustification(e.target.value)}
-            placeholder="Provide details for your request..." 
+            placeholder="Détaillez la raison de votre demande (date, heure souhaitée, motifs...)" 
             className="min-h-[120px] bg-gray-50 border-gray-100 rounded-xl resize-none p-4"
           />
         </div>
@@ -160,16 +182,16 @@ export function SubmitRequestForm({ onSubmitted }: SubmitRequestFormProps) {
         <Button 
           onClick={handleSubmit} 
           disabled={submitting}
-          className="w-full h-14 bg-[#001f3f] hover:bg-[#001429] rounded-xl text-md font-bold gap-2"
+          className="w-full h-14 bg-[#17203A] hover:bg-[#12192B] rounded-xl text-md font-bold gap-2"
         >
           {submitting ? (
             <>
-              Sending...
+              Envoi en cours...
               <Loader2 className="w-4 h-4 animate-spin" />
             </>
           ) : (
             <>
-              Send Request for Validation
+              Envoyer la Demande
               <Send className="w-4 h-4" />
             </>
           )}
@@ -184,20 +206,20 @@ interface RequestsSummaryCardsProps {
 }
 
 export function RequestsSummaryCards({ demandes }: RequestsSummaryCardsProps) {
-  const countByStatus = (status: string) => {
+  const countByStatut = (status: string) => {
     return demandes.filter((d) => d.Statut?.toLowerCase() === status.toLowerCase()).length;
   };
 
-  const pendingCount = countByStatus("en attente") + countByStatus("pending");
-  const approvedCount = countByStatus("validée") + countByStatus("validee") + countByStatus("approved");
-  const rejectedCount = countByStatus("refusée") + countByStatus("refusee") + countByStatus("rejected");
+  const pendingCount = countByStatut("en attente") + countByStatut("pending");
+  const approvedCount = countByStatut("validée") + countByStatut("validee") + countByStatut("approved");
+  const rejectedCount = countByStatut("refusée") + countByStatut("refusee") + countByStatut("rejected");
 
   const padZero = (num: number) => (num < 10 ? `0${num}` : num.toString());
 
   const summaries = [
-    { label: "PENDING APPROVAL", value: padZero(pendingCount), icon: Clock, color: "bg-amber-50 text-amber-600", iconBg: "bg-amber-100" },
-    { label: "SUCCESSFULLY VALIDATED", value: padZero(approvedCount), icon: Send, color: "bg-green-50 text-green-600", iconBg: "bg-green-100" },
-    { label: "TOTAL REFUSED", value: padZero(rejectedCount), icon: Info, color: "bg-red-50 text-red-600", iconBg: "bg-red-100" }
+    { label: "EN ATTENTE D'APPROBATION", value: padZero(pendingCount), icon: Clock, color: "bg-amber-50 text-amber-600", iconBg: "bg-amber-100" },
+    { label: "VALIDÉES AVEC SUCCÈS", value: padZero(approvedCount), icon: Send, color: "bg-green-50 text-green-600", iconBg: "bg-green-100" },
+    { label: "TOTAL REFUSÉES", value: padZero(rejectedCount), icon: Info, color: "bg-red-50 text-red-600", iconBg: "bg-red-100" }
   ];
 
   return (
