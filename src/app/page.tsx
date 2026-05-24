@@ -25,12 +25,7 @@ export default function LandingPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link 
-              href="/connexion" 
-              className="px-6 py-2.5 rounded-xl border border-white/10 text-sm font-bold text-white hover:bg-white/5 transition-all duration-200"
-            >
-              Connexion
-            </Link>
+
             <Link 
               href="/connexion" 
               className="bg-[#73A5D4] hover:bg-[#5C8ABF] text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-[#73A5D4]/20 hover:shadow-lg transition-all duration-200 flex items-center gap-2 group"
@@ -169,10 +164,10 @@ export default function LandingPage() {
           <div className="col-span-1 md:col-span-1">
             <h4 className="text-lg font-bold mb-6 text-white">Navigation</h4>
             <ul className="space-y-4 text-gray-400">
-              <li><a href="#" className="hover:text-[#73A5D4] transition-colors">Formations</a></li>
-              <li><a href="#" className="hover:text-[#73A5D4] transition-colors">Projets</a></li>
-              <li><a href="#" className="hover:text-[#73A5D4] transition-colors">Recherche</a></li>
-              <li><a href="#" className="hover:text-[#73A5D4] transition-colors">Partenaires</a></li>
+              <li><Link href="/" className="hover:text-[#73A5D4] transition-colors">Formations</Link></li>
+              <li><Link href="/" className="hover:text-[#73A5D4] transition-colors">Projets</Link></li>
+              <li><Link href="/" className="hover:text-[#73A5D4] transition-colors">Recherche</Link></li>
+              <li><Link href="/" className="hover:text-[#73A5D4] transition-colors">Partenaires</Link></li>
             </ul>
           </div>
           
@@ -213,10 +208,10 @@ export default function LandingPage() {
           <div className="col-span-1 md:col-span-1">
             <h4 className="text-lg font-bold mb-6 text-white">Réseaux sociaux</h4>
             <div className="flex items-center gap-3">
-              <a href="#" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-[#73A5D4] transition-colors font-bold text-sm">Fb</a>
-              <a href="#" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-[#73A5D4] transition-colors font-bold text-sm">Ig</a>
-              <a href="#" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-[#73A5D4] transition-colors font-bold text-sm">In</a>
-              <a href="#" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-[#73A5D4] transition-colors font-bold text-sm">X</a>
+              <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-[#73A5D4] transition-colors font-bold text-sm">Fb</Link>
+              <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-[#73A5D4] transition-colors font-bold text-sm">Ig</Link>
+              <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-[#73A5D4] transition-colors font-bold text-sm">In</Link>
+              <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-[#73A5D4] transition-colors font-bold text-sm">X</Link>
             </div>
           </div>
         </div>

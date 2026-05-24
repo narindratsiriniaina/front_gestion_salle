@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-import { DoorOpen, CheckCircle2, Users, Settings2, Download, Printer, Edit2, Calendar } from "lucide-react";
+import { DoorOpen, CheckCircle2, Users, Settings2, Download, Printer, Edit2, Calendar, MoreVertical, Trash2, Eye } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
@@ -12,6 +12,14 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
 import { Room } from "@/types/room.types";
 
 interface RoomProps {
@@ -112,10 +120,28 @@ export function RoomInventoryTable({ salles }: RoomProps) {
                       </div>
                     </TableCell>
                     <TableCell className="pr-8 text-right">
-                      <div className="flex justify-end gap-4">
-                        <button className="text-xs font-bold text-blue-900 hover:underline flex items-center gap-1"><Edit2 size={12} /> Modifier Room</button>
-                        <button className="text-xs font-bold text-amber-600 hover:underline flex items-center gap-1"><Calendar size={12} /> Voir le planning</button>
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-9 w-9 p-0 border border-gray-200 hover:bg-gray-100 rounded-full shadow-sm">
+                            <MoreVertical className="h-4 w-4 text-gray-600" />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="bg-white border shadow-xl rounded-xl p-2 min-w-[160px]">
+                          <DropdownMenuLabel className="text-[10px] font-bold text-gray-400 uppercase px-2 py-1.5">Action Salle</DropdownMenuLabel>
+                          <DropdownMenuSeparator className="bg-gray-100" />
+                          <DropdownMenuItem className="flex items-center gap-2 p-2 focus:bg-blue-50 focus:text-blue-700 rounded-lg cursor-pointer font-medium">
+                            <Edit2 className="w-4 h-4" /> Modifier Room
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="flex items-center gap-2 p-2 focus:bg-amber-50 focus:text-amber-700 rounded-lg cursor-pointer font-medium">
+                            <Calendar className="w-4 h-4" /> Voir le planning
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="bg-gray-100" />
+                          <DropdownMenuItem className="flex items-center gap-2 p-2 focus:bg-red-50 focus:text-red-700 rounded-lg cursor-pointer font-medium">
+                            <Trash2 className="w-4 h-4" /> Supprimer
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 );

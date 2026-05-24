@@ -14,27 +14,34 @@ import { RoomStats, RoomInventoryTable, UsageEfficacité } from "@/components/fe
 import { Card } from "@/components/ui/card";
 import { roomService } from "@/services/room.service";
 import { Room } from "@/types/room.types";
+import { AddRoomModal } from "@/components/features/salles/AddRoomModal";
 
 export function ClassroomsContent() {
   const [salles, setSalles] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchSalles() {
-      try {
-        setLoading(true);
-        const data = await roomService.getRooms();
-        setSalles(data);
-      } catch (err: unknown) {
-        console.error("Failed to fetch salles", err);
-        setError("Erreur lors de la récupération des salles.");
-      } finally {
-        setLoading(false);
-      }
+  const [selectedBatiment, setSelectedBatiment] = useState<string>("all");
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+
+  async function fetchSalles() {
+    try {
+      setLoading(true);
+      const data = await roomService.getRooms(selectedBatiment, selectedType);
+      setSalles(data);
+      setError(null);
+    } catch (err: unknown) {
+      console.error("Failed to fetch salles", err);
+      setError("Erreur lors de la récupération des salles.");
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
     fetchSalles();
-  }, []);
+  }, [selectedBatiment, selectedType]);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
@@ -43,31 +50,41 @@ export function ClassroomsContent() {
           <h1 className="text-3xl font-black text-[#17203A] tracking-tight">Gestion des Salles</h1>
           <p className="text-gray-500 mt-1">Manage infrastructure, seating capacity, and room availability across all campus buildings.</p>
         </div>
-        <div className="flex items-end gap-3">
+        <div className="flex flex-wrap items-end gap-3">
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Bâtiment</span>
-            <Select defaultValue="all">
-              <SelectTrigger className="w-[140px] h-11 bg-white border-gray-200">
-                <SelectValue placeholder="Tous les Bâtiments" />
+            <Select value={selectedBatiment} onValueChange={setSelectedBatiment}>
+              <SelectTrigger className="w-[140px] h-11 bg-white border-gray-200 font-bold text-[#17203A]">
+                <SelectValue placeholder="Tous" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tous les Bâtiments</SelectItem>
+                <SelectItem value="all">Tous</SelectItem>
+                <SelectItem value="A">Bâtiment A</SelectItem>
+                <SelectItem value="B">Bâtiment B</SelectItem>
+                <SelectItem value="C">Bâtiment C</SelectItem>
+                <SelectItem value="D">Bâtiment D</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Type de salle</span>
-            <Select defaultValue="all">
-              <SelectTrigger className="w-[140px] h-11 bg-white border-gray-200">
-                <SelectValue placeholder="Tous les Types" />
+            <Select value={selectedType} onValueChange={setSelectedType}>
+              <SelectTrigger className="w-[140px] h-11 bg-white border-gray-200 font-bold text-[#17203A]">
+                <SelectValue placeholder="Tous" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tous les Types</SelectItem>
+                <SelectItem value="all">Tous</SelectItem>
+                <SelectItem value="cours">Cours</SelectItem>
+                <SelectItem value="tp">TP</SelectItem>
+                <SelectItem value="amphi">Amphi</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <Button className="h-11 px-6 bg-[#17203A] hover:bg-[#12192B] gap-2">
-            <Filter className="w-4 h-4" /> Appliquer Filtres
+          <Button 
+            onClick={() => setIsAddModalOpen(true)}
+            className="h-11 px-6 bg-[#17203A] hover:bg-[#12192B] gap-2 font-bold"
+          >
+            <Plus className="w-4 h-4" /> Ajouter Salle
           </Button>
         </div>
       </div>
@@ -104,9 +121,19 @@ export function ClassroomsContent() {
         </div>
       </div>
 
-      <Button className="fixed bottom-10 right-10 w-14 h-14 rounded-2xl bg-[#5C8ABF] hover:bg-[#a67a0a] shadow-2xl p-0 flex items-center justify-center lg:hidden">
+      {/* Mobile Plus Button */}
+      <Button 
+        onClick={() => setIsAddModalOpen(true)}
+        className="fixed bottom-10 right-10 w-14 h-14 rounded-2xl bg-[#5C8ABF] hover:bg-[#a67a0a] shadow-2xl p-0 flex items-center justify-center lg:hidden z-50"
+      >
         <Plus className="text-white w-6 h-6" />
       </Button>
+
+      <AddRoomModal 
+        open={isAddModalOpen} 
+        onOpenChange={setIsAddModalOpen} 
+        onSuccess={fetchSalles} 
+      />
     </div>
   );
 }

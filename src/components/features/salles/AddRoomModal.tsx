@@ -71,7 +71,7 @@ export function AddRoomModal({ open, onOpenChange, onSuccess }: AddRoomModalProp
       <DialogTrigger asChild>
         <span />
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md bg-white">
+      <DialogContent className="sm:max-w-5xl bg-white">
         <DialogHeader>
           <DialogTitle className="text-[#17203A]">Nouvelle salle</DialogTitle>
           <DialogDescription>

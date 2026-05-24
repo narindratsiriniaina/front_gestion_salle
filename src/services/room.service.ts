@@ -2,8 +2,13 @@ import api from "./api";
 import { Room } from "@/types/room.types";
 
 export const roomService = {
-  getRooms: async (): Promise<Room[]> => {
-    const response = await api.get<Room[]>("/Salle");
+  getRooms: async (batiment?: string, type?: string): Promise<Room[]> => {
+    const response = await api.get<Room[]>("/Salle", {
+      params: {
+        batiment: batiment === "all" ? undefined : batiment,
+        type: type === "all" ? undefined : type,
+      }
+    });
     return response.data;
   },
 

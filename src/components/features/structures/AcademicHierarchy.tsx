@@ -1,9 +1,17 @@
-﻿"use client";
+"use client";
 
-import { Plus, Edit2, ChevronDown, Network } from "lucide-react";
+import { Plus, Edit2, ChevronDown, Network, MoreVertical, Trash2, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
 
 const departments = [
   {
@@ -57,9 +65,28 @@ export function AcademicHierarchy() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="text-gray-400 hover:text-blue-900">
-                  <Edit2 className="w-4 h-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-9 w-9 p-0 border border-gray-200 hover:bg-gray-100 rounded-full shadow-sm">
+                      <MoreVertical className="h-4 w-4 text-gray-600" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-white border shadow-xl rounded-xl p-2 min-w-[160px]">
+                    <DropdownMenuLabel className="text-[10px] font-bold text-gray-400 uppercase px-2 py-1.5">Département</DropdownMenuLabel>
+                    <DropdownMenuSeparator className="bg-gray-100" />
+                    <DropdownMenuItem className="flex items-center gap-2 p-2 focus:bg-blue-50 focus:text-blue-700 rounded-lg cursor-pointer font-medium">
+                      <Edit2 className="w-4 h-4" /> Modifier l'unité
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center gap-2 p-2 focus:bg-amber-50 focus:text-amber-700 rounded-lg cursor-pointer font-medium">
+                      <Settings className="w-4 h-4" /> Paramètres
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="bg-gray-100" />
+                    <DropdownMenuItem className="flex items-center gap-2 p-2 focus:bg-red-50 focus:text-red-700 rounded-lg cursor-pointer font-medium">
+                      <Trash2 className="w-4 h-4" /> Supprimer
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Button variant="ghost" size="icon" className="text-gray-400">
                   <ChevronDown className="w-5 h-5" />
                 </Button>

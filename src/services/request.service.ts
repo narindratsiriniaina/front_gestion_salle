@@ -16,4 +16,9 @@ export const requestService = {
     const response = await api.post<TimetableRequest>(`/DemandeEDT/${id}/Valider`);
     return response.data;
   },
+
+  rejectRequest: async (id: number): Promise<TimetableRequest> => {
+    const response = await api.post<TimetableRequest>(`/DemandeEDT/${id}/Refuser`);
+    return response.data;
+  },
 };

@@ -25,4 +25,14 @@ export const authService = {
     const response = await api.get<User[]>("/Utilisateur");
     return response.data;
   },
+
+  updateUser: async (id: number, user: User): Promise<User> => {
+    const response = await api.put<User>(`/Utilisateur/${id}`, user);
+    return response.data;
+  },
+
+  deleteUser: async (id: number): Promise<User> => {
+    const response = await api.delete<User>(`/Utilisateur/${id}`);
+    return response.data;
+  },
 };

@@ -12,12 +12,14 @@ import {
   CheckSquare, 
   Settings, 
   LifeBuoy,
-  Plus
+  Plus,
+  LogOut
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-const menuItems = [
+const baseMenuItems = [
   { icon: LayoutDashboard, label: "Tableau de bord", href: "/" },
   { icon: Calendar, label: "Emplois du temps", href: "/emplois-du-temps" },
   { icon: DoorOpen, label: "Salles de classe", href: "/salles" },
@@ -28,12 +30,37 @@ const menuItems = [
 ];
 
 const bottomItems = [
-  { icon: Settings, label: "Paramètres", href: "/settings" },
+  { icon: Settings, label: "Paramètres", href: "/parametres" },
   { icon: LifeBuoy, label: "Aide & Support", href: "/support" },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userStr = localStorage.getItem("user");
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          setRole(user.role);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, []);
+
+  const menuItems = [...baseMenuItems];
+  if (role === "admin") {
+    menuItems.push({ icon: Users, label: "Utilisateurs", href: "/admin/utilisateurs" });
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    window.location.href = "/connexion";
+  };
 
   return (
     <div className="flex flex-col h-screen w-64 bg-[#17203A] text-white border-r border-white/10">
@@ -93,6 +120,13 @@ export function Sidebar() {
               <span className="text-sm">{item.label}</span>
             </Link>
           ))}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all text-left"
+          >
+            <LogOut className="w-5 h-5 text-red-400" />
+            <span className="text-sm">Se déconnecter</span>
+          </button>
         </div>
       </div>
     </div>
