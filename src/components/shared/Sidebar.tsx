@@ -23,6 +23,7 @@ const menuItems = [
   { icon: DoorOpen, label: "Salles de classe", href: "/salles" },
   { icon: Users, label: "Enseignants", href: "/faculty" },
   { icon: Network, label: "Structures", href: "/structures" },
+  { icon: ClipboardList, label: "Cours", href: "/cours" },
   { icon: ClipboardList, label: "Requêtes", href: "/requetes" },
   { icon: CheckSquare, label: "Validation", href: "/validation" },
 ];
